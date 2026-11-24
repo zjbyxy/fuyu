@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "fuyu",
     "productName":  "浮屿",
     "version":  "1.0.0",
@@ -20,10 +20,23 @@
                   "productName":  "浮屿",
                   "win":  {
                               "target":  "portable",
-                              "icon":  "assets/icon.png"
+                              "icon":  "assets/icon.ico",
+                              "signAndEditExecutable":  false
                           },
                   "portable":  {
                                    "artifactName":  "浮屿-Portable.exe"
-                               }
+                               },
+                  "directories":  {
+                                      "output":  "C:/fuyu_dist"
+                                  },
+                  "executableName":  "FuYu",
+                  "files":  [
+                                "**/*",
+                                "!dist",
+                                "!release",
+                                "!AGENTS.md",
+                                "!tools",
+                                "!启动浮屿.bat"
+                            ]
               }
 }
