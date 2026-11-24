@@ -1,0 +1,19 @@
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+release/
+
+# Local workspace notes (personal, not for public repo)
+AGENTS.md
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local temp
+tmp/

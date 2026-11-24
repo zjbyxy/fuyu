@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https:;">
+<title>浮屿</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="island">
+  <!-- 收起态：状态指示灯 -> [音乐：歌名 · 歌词] -> 科技状态(C/M/G + 网速 + 喝水) -> 时间 -->
+  <div id="collapsed">
+    <span class="c-dot" id="cDot1"></span>
+    <span class="c-dot dim" id="cDot2"></span>
+    <div class="c-music hidden" id="cMusic">
+      <span class="c-song" id="cSong"></span>
+      <span class="c-sep"></span>
+      <span class="c-lyric-wrap"><span id="cLyric"></span></span>
+    </div>
+    <span class="c-pomo hidden" id="cPomo"></span>
+    <div class="c-stats">
+      <span class="c-stat cpu" title="CPU 负载">
+        <svg class="c-ico" viewBox="0 0 24 24">
+          <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/>
+          <rect x="9.8" y="9.8" width="4.4" height="4.4" rx="0.7" fill="currentColor"/>
+          <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+        <b id="mCpuVal">--%</b>
+      </span>
+      <span class="c-stat ram" title="内存占用">
+        <svg class="c-ico" viewBox="0 0 24 24">
+          <rect x="3" y="7" width="18" height="9" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M7 10.5v2M12 10.5v2M17 10.5v2M6 16v2.5M10 16v2.5M14 16v2.5M18 16v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <b id="mMemVal">--%</b>
+      </span>
+      <span class="c-stat gpu" title="显卡负载">
+        <svg class="c-ico" viewBox="0 0 24 24">
+          <rect x="2.5" y="6" width="19" height="12" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.9"/>
+          <circle cx="8.5" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <circle cx="8.5" cy="12" r="0.9" fill="currentColor"/>
+          <circle cx="15.5" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <circle cx="15.5" cy="12" r="0.9" fill="currentColor"/>
+          <path d="M5 18v2.5M9 18v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <b id="mGpuVal">--%</b>
+      </span>
+      <span class="c-net" title="网络速度">
+        <svg class="c-ico down" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4.5-4.5M12 16l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <b id="mRx">--</b>
+      </span>
+      <span class="c-net up" title="上传速度">
+        <svg class="c-ico" viewBox="0 0 24 24"><path d="M12 20V8m0 0l-4.5 4.5M12 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <b id="mTx">--</b>
+      </span>
+      <span class="c-water hidden" id="mWater" title="喝水提醒">
+        <svg class="c-ico" viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+        <b id="mWaterT"></b>
+      </span>
+    </div>
+    <span class="c-time" id="mTime">--:--</span>
+  </div>
+
+  <!-- 展开态 -->
+  <div id="expanded">
+    <header id="exHead">
+      <div class="eh-left">
+        <span id="timeBig">--:--</span>
+        <span id="dateBig">加载中</span>
+      </div>
+      <div class="eh-right" id="headStats">
+        <span class="c-stat cpu" title="CPU">
+          <svg class="c-ico" viewBox="0 0 24 24">
+            <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/>
+            <rect x="9.8" y="9.8" width="4.4" height="4.4" rx="0.7" fill="currentColor"/>
+            <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          </svg>
+          <b id="ehCpu">--%</b>
+        </span>
+        <span class="c-stat gpu" title="GPU">
+          <svg class="c-ico" viewBox="0 0 24 24">
+            <rect x="2.5" y="6" width="19" height="12" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.9"/>
+            <circle cx="8.5" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <circle cx="15.5" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+          <b id="ehGpu">--%</b>
+        </span>
+        <span class="c-stat ram" title="内存">
+          <svg class="c-ico" viewBox="0 0 24 24">
+            <rect x="3" y="7" width="18" height="9" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.9"/>
+            <path d="M7 10.5v2M12 10.5v2M17 10.5v2M6 16v2.5M10 16v2.5M14 16v2.5M18 16v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <b id="ehMem">--%</b>
+        </span>
+        <button class="gear-btn" id="btnOpenSettings" title="打开设置（新窗口）">
+          <svg viewBox="0 0 24 24">
+            <path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.5-2-3.4-2.3.9a7.4 7.4 0 0 0-1.7-1L15 3.5h-4l-.4 2.5c-.6.2-1.2.6-1.7 1l-2.3-.9-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.5 2 3.4 2.3-.9c.5.4 1.1.7 1.7 1l.4 2.5h4l.4-2.5c.6-.3 1.2-.6 1.7-1l2.3.9 2-3.4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <circle cx="13" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+      <nav id="tabs">
+      <button class="tab active" data-page="chat">AI</button>
+      <button class="tab" data-page="music">音乐</button>
+      <button class="tab" data-page="shelf">暂存</button>
+      <button class="tab" data-page="monitor">状态</button>
+      <button class="tab" data-page="notes">便签</button>
+      <button class="tab" data-page="pomo">番茄</button>
+      <button class="tab" data-page="clips">剪贴</button>
+      <button class="tab" data-page="weather">天气</button>
+    </nav>
+
+    <main id="pages">
+      <!-- AI 对话 -->
+      <section id="page-chat" class="page active">
+        <div class="chat-top">
+          <select id="chatSessions" title="历史会话"></select>
+          <button class="mini" id="btnNewChat">新对话</button>
+          <button class="mini danger hidden" id="btnStopGen">停止</button>
+        </div>
+        <div id="chatMsgs"></div>
+        <div class="chat-bottom">
+          <textarea id="chatInput" rows="2" placeholder="问点什么… Ctrl+Enter 发送"></textarea>
+          <button id="btnSend">发送</button>
+        </div>
+        <div id="chatHint" class="hidden"></div>
+      </section>
+
+      <!-- 音乐控制 + 歌词 -->
+      <section id="page-music" class="page">
+        <div class="mu-ambient" id="muAmbient"></div>
+        <div class="mu-body">
+          <div class="mu-hero">
+            <div class="mu-title" id="muTitle">未播放</div>
+            <div class="mu-meta">
+              <span class="mu-sub" id="muSub">打开音乐软件播放后自动识别</span>
+              <span class="mu-src" id="muSrc"></span>
+            </div>
+          </div>
+
+          <div class="mu-prog">
+            <div class="mu-bar"><div id="muBarFill"></div></div>
+            <div class="mu-time"><span id="muPosCur">--:--</span><span id="muDur">--:--</span></div>
+          </div>
+
+          <div class="mu-bar-row">
+            <div class="mu-vol">
+              <button class="mu-ic sm" id="muVolDn" title="音量 -">
+                <svg viewBox="0 0 24 24"><path d="M3.5 10v4h3l4 3.5v-11l-4 3.5z"/><path d="M14 10.8h5.5v2.4H14z"/></svg>
+              </button>
+              <button class="mu-ic sm" id="muVolMute" title="静音">
+                <svg viewBox="0 0 24 24"><path d="M3.5 10v4h3l4 3.5v-11l-4 3.5z"/><path d="M17.3 9.2l1.5 1.5-2 2 2 2-1.5 1.5-2-2-2 2-1.5-1.5 2-2-2-2 1.5-1.5 2 2z"/></svg>
+              </button>
+              <button class="mu-ic sm" id="muVolUp" title="音量 +">
+                <svg viewBox="0 0 24 24"><path d="M3.5 10v4h3l4 3.5v-11l-4 3.5z"/><path d="M14 10.8h5.5v2.4H14zM15.6 9.2h2.4v5.6h-2.4z"/></svg>
+              </button>
+            </div>
+            <div class="mu-controls">
+              <button class="mu-ic" id="muPrev" title="上一首">
+                <svg viewBox="0 0 24 24"><path d="M7 6h2.6v12H7zM19 6v12l-9.4-6z"/></svg>
+              </button>
+              <button class="mu-ic main" id="muToggle" title="播放 / 暂停">
+                <svg viewBox="0 0 24 24"><path d="M8.5 5.5v13L19 12z"/></svg>
+              </button>
+              <button class="mu-ic" id="muNext" title="下一首">
+                <svg viewBox="0 0 24 24"><path d="M14.4 6H17v12h-2.6zM5 6v12l9.4-6z"/></svg>
+              </button>
+            </div>
+            <div class="ly-tools">
+              <button class="ly-adj" id="lyEarly" title="歌词提前 0.5 秒">‹</button>
+              <button class="ly-adj" id="lyLate" title="歌词延后 0.5 秒">›</button>
+            </div>
+          </div>
+
+          <div class="lyric3" id="lyric3">
+            <div class="ly-line ly-prev" id="lyPrev"></div>
+            <div class="ly-line ly-cur" id="lyCur">等待播放…</div>
+            <div class="ly-line ly-next" id="lyNext"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 文件暂存区（拖拽暂存 / 图标与列表视图切换 / 完整文件信息 / 直接拖出或复制取出） -->
+      <section id="page-shelf" class="page">
+        <div class="sf-top">
+          <span class="sf-count" id="sfCount">0 项暂存</span>
+          <select id="sfSelect" class="sf-select hidden" title="分类筛选 / 快速选择文件"></select>
+          <div class="sf-actions">
+            <button class="sf-top-btn danger hidden" id="sfClearBtn" title="清空暂存列表（不删除原文件）">清空</button>
+            <button class="sf-view-btn" id="sfViewBtn" title="切换图标视图 / 列表视图">
+              <svg id="sfViewIco" viewBox="0 0 24 24">
+                <path d="M4 6h16v2.5H4zm0 5h16v2.5H4zm0 5h16v2.5H4z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="sfDropZone" class="sf-drop">
+          <div id="sfEmpty" class="sf-empty">
+            <svg viewBox="0 0 24 24">
+              <path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M12 10v6m-3-3h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <div class="sf-empty-t">把桌面文件或文件夹拖到这里暂存</div>
+            <div class="sf-empty-s">支持直接拖出到桌面/软件 · 双击打开查看</div>
+          </div>
+          <div id="sfItems" class="sf-grid hidden"></div>
+        </div>
+
+        <div id="sfDetail" class="sf-detail hidden">
+          <div class="sf-dt-main">
+            <div class="sf-dt-name" id="sfDtName">--</div>
+            <div class="sf-dt-meta" id="sfDtMeta">--</div>
+            <div class="sf-dt-path" id="sfDtPath">--</div>
+          </div>
+          <div class="sf-dt-btns">
+            <button class="sf-act primary" id="sfBtnOpen" title="直接打开查看">打开</button>
+            <button class="sf-act" id="sfBtnTake" title="复制文件到剪贴板（可在桌面/文件夹直接 Ctrl+V 粘贴取出，也可直接按住图标拖出）">取出</button>
+            <button class="sf-act" id="sfBtnReveal" title="在资源管理器中定位">定位</button>
+            <button class="sf-act danger" id="sfBtnDel" title="从暂存区移除">移除</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 系统状态（监控仪表盘） -->
+      <section id="page-monitor" class="page">
+        <div class="mon-top">
+          <span class="mon-chip cpu">
+            <svg class="c-ico" viewBox="0 0 24 24">
+              <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <rect x="9.8" y="9.8" width="4.4" height="4.4" rx="0.7" fill="currentColor"/>
+              <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+            </svg>
+            <b id="monCpuPct">--%</b>
+            <canvas id="monSpark" width="72" height="20"></canvas>
+          </span>
+          <span class="mon-chip batt" title="电池 / 电源">
+            <svg class="c-ico" viewBox="0 0 24 24">
+              <rect x="2.5" y="8" width="16" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M20.5 10.5v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+            </svg>
+            <b id="monBatt">--</b>
+          </span>
+          <div class="mon-sort">
+            <button class="mon-chip-btn active" id="chipCpu" title="按 CPU 排序">CPU</button>
+            <button class="mon-chip-btn" id="chipMem" title="按内存排序">内存</button>
+          </div>
+        </div>
+
+        <div class="mon-cores-row">
+          <div id="monCpuView" class="mon-viz">
+            <div id="coreBars" class="core-bars" title="各核心负载"></div>
+            <span class="mon-vram" id="monVram" title="显存占用">显存 --%</span>
+          </div>
+          <div id="monMemView" class="mon-viz hidden">
+            <div class="mem-head">
+              <span>物理内存占用 TOP</span>
+              <b id="memAvail">--</b>
+            </div>
+            <div id="memProcBars" class="mem-bars"></div>
+          </div>
+        </div>
+
+        <div class="mon-line">
+          <span class="c-stat ram">
+            <svg class="c-ico" viewBox="0 0 24 24">
+              <rect x="3" y="7" width="18" height="9" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.9"/>
+              <path d="M7 10.5v2M12 10.5v2M17 10.5v2M6 16v2.5M10 16v2.5M14 16v2.5M18 16v2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <b id="monMemPct">--%</b>
+          </span>
+          <span class="mon-mem-txt" id="monMemTxt">--</span>
+          <div class="mon-mem-bar"><div id="monMemBar"></div></div>
+        </div>
+
+        <div class="mon-line net-line">
+          <span class="net-item down">
+            <svg class="c-ico" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-4.5-4.5M12 16l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <b id="monRx">--</b>
+            <i id="monRxTotal"></i>
+          </span>
+          <span class="net-item up">
+            <svg class="c-ico" viewBox="0 0 24 24"><path d="M12 20V8m0 0l-4.5 4.5M12 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 4h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <b id="monTx">--</b>
+            <i id="monTxTotal"></i>
+          </span>
+        </div>
+
+        <div class="mon-line pwr-line">
+          <span class="net-item pwr" title="GPU 功耗（nvidia-smi）">
+            <svg class="c-ico" viewBox="0 0 24 24"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <b id="monPower">--</b>
+            <i id="monPowerAvg"></i>
+          </span>
+          <span class="net-sub" id="monGpuName2"></span>
+        </div>
+
+        <div id="procList" class="proc-list"></div>
+      </section>
+
+      <!-- 便签 + 日历 -->
+      <section id="page-notes" class="page">
+        <div class="cal">
+          <div class="cal-head">
+            <button class="mini" id="calPrev">&lt;</button>
+            <span id="calTitle">--</span>
+            <button class="mini" id="calNext">&gt;</button>
+            <button class="mini" id="calToday">今天</button>
+          </div>
+          <div class="cal-week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+        <div class="nt-add">
+          <input id="noteInput" placeholder="记一条，Enter 保存">
+          <button id="btnAddNote">添加</button>
+        </div>
+        <div id="noteList"></div>
+      </section>
+
+      <!-- 番茄钟（赛博朋克表盘） -->
+      <section id="page-pomo" class="page">
+        <div class="cy-dial" id="poDial">
+          <svg viewBox="0 0 220 220">
+            <circle class="cy-track" cx="110" cy="110" r="96"></circle>
+            <circle class="cy-progress" id="poRing" cx="110" cy="110" r="96"></circle>
+            <circle class="cy-inner" cx="110" cy="110" r="82"></circle>
+          </svg>
+          <div class="cy-center">
+            <div class="cy-phase" id="poPhase">专注</div>
+            <div class="cy-time" id="poDisplay">25:00</div>
+            <div class="cy-rounds" id="poRoundsTxt">ROUND 1 / 4</div>
+          </div>
+        </div>
+        <div class="cy-btns">
+          <button id="btnPomoStart" class="cy-btn">开始</button>
+          <button id="btnPomoPause" class="cy-btn">暂停</button>
+          <button id="btnPomoSkip" class="cy-btn">跳过</button>
+          <button id="btnPomoReset" class="cy-btn">重置</button>
+        </div>
+        <div class="po-cfg cy-cfg">
+          <label>专注 <input id="poWork" type="number" min="1" max="120" value="25"> 分</label>
+          <label>小憩 <input id="poShort" type="number" min="1" max="60" value="5"> 分</label>
+          <label>长休 <input id="poLong" type="number" min="1" max="90" value="15"> 分</label>
+          <label>轮数 <input id="poRounds" type="number" min="2" max="10" value="4"> 轮</label>
+          <button id="poApply">应用</button>
+        </div>
+      </section>
+
+      <!-- 剪贴板历史 -->
+      <section id="page-clips" class="page">
+        <div class="cl-top">
+          <span id="clipCount">共 0 条</span>
+          <button class="mini danger" id="btnClipClear">清空</button>
+        </div>
+        <div id="clipList"></div>
+      </section>
+
+      <!-- 天气 -->
+      <section id="page-weather" class="page">
+        <div class="wt-top">
+          <span id="wtCity">--</span>
+          <button class="mini" id="btnWtRefresh">刷新</button>
+        </div>
+        <div id="wtMain" class="wt-main">加载中…</div>
+        <div id="wtDays" class="wt-days"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

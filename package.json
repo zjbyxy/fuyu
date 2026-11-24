@@ -1,0 +1,29 @@
+﻿{
+    "name":  "fuyu",
+    "productName":  "浮屿",
+    "version":  "1.0.0",
+    "description":  "Windows 桌面浮屿 FuYu：悬停展开 + DeepSeek AI + 系统状态 + 文件暂存",
+    "main":  "main.js",
+    "author":  "local",
+    "license":  "MIT",
+    "scripts":  {
+                    "start":  "electron .",
+                    "dev":  "electron . --dev",
+                    "dist":  "electron-builder --win portable --config.icon=assets/icon.png"
+                },
+    "devDependencies":  {
+                            "electron":  "^33.2.0",
+                            "electron-builder":  "^25.1.8"
+                        },
+    "build":  {
+                  "appId":  "com.local.dynamicisland",
+                  "productName":  "浮屿",
+                  "win":  {
+                              "target":  "portable",
+                              "icon":  "assets/icon.png"
+                          },
+                  "portable":  {
+                                   "artifactName":  "浮屿-Portable.exe"
+                               }
+              }
+}

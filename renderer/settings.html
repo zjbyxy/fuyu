@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>浮屿 · 设置</title>
+<link rel="stylesheet" href="settings.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="st-head">
+    <span class="st-logo">浮屿</span>
+    <span class="st-sub">设置中心</span>
+  </header>
+
+  <main class="st-scroll">
+    <!-- 外观 -->
+    <div class="group">
+      <div class="g-title">外观</div>
+      <label class="row"><span>字体样式</span>
+        <select id="setFont">
+          <option value="">默认（Segoe UI / 雅黑）</option>
+          <option value="Microsoft YaHei">微软雅黑</option>
+          <option value="Segoe UI">Segoe UI</option>
+          <option value="DengXian">等线</option>
+          <option value="SimSun">宋体</option>
+          <option value="KaiTi">楷体</option>
+          <option value="Consolas">Consolas 等宽</option>
+        </select>
+      </label>
+      <label class="row"><span>字体大小</span>
+        <input type="range" id="setFontScale" min="0.8" max="1.4" step="0.05" value="1">
+        <b id="fontScaleVal">100%</b>
+      </label>
+      <label class="row"><span>强调色</span>
+        <span class="swatches" id="swatches">
+          <i data-c="#4c8dff" style="background:#4c8dff"></i>
+          <i data-c="#00c3ff" style="background:#00c3ff"></i>
+          <i data-c="#a86bff" style="background:#a86bff"></i>
+          <i data-c="#35c76a" style="background:#35c76a"></i>
+          <i data-c="#ff5ec4" style="background:#ff5ec4"></i>
+          <i data-c="#ff9838" style="background:#ff9838"></i>
+        </span>
+        <input type="color" id="setColor" value="#4c8dff" title="自定义颜色">
+      </label>
+      <label class="row"><span>背景不透明度</span>
+        <input type="range" id="setOpacity" min="55" max="100" step="1" value="97">
+        <b id="opacityVal">97%</b>
+      </label>
+      <label class="row"><span>顶部贴边距离</span>
+        <input type="range" id="setTop" min="0" max="40" step="1" value="8">
+        <b id="topVal">8px</b>
+      </label>
+    </div>
+
+    <!-- 提醒 -->
+    <div class="group">
+      <div class="g-title">提醒</div>
+      <label class="row"><span>喝水提醒间隔</span>
+        <select id="setWater">
+          <option value="0">关闭</option>
+          <option value="15">15 分钟</option>
+          <option value="30">30 分钟</option>
+          <option value="45">45 分钟</option>
+          <option value="60">60 分钟</option>
+          <option value="90">90 分钟</option>
+          <option value="120">120 分钟</option>
+          <option value="180">180 分钟</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- DeepSeek -->
+    <div class="group">
+      <div class="g-title">DeepSeek API（OpenAI 兼容）</div>
+      <label class="row"><span>API Key</span>
+        <input type="password" id="setApiKey" placeholder="sk-...">
+        <button class="mini" id="btnEye">显示</button>
+      </label>
+      <label class="row"><span>Base URL</span><input id="setBaseUrl" placeholder="https://api.deepseek.com/v1"></label>
+      <label class="row"><span>模型名</span><input id="setModel" placeholder="deepseek-chat"><em class="tip">可填任意版本</em></label>
+      <label class="row"><span>温度</span><input id="setTemp" type="number" min="0" max="2" step="0.1" value="0.7"></label>
+      <label class="col"><span>系统提示词</span><textarea id="setPrompt" rows="3"></textarea></label>
+    </div>
+
+    <!-- 天气与系统 -->
+    <div class="group">
+      <div class="g-title">天气与系统</div>
+      <label class="row"><span>天气城市</span><input id="setCity" placeholder="北京"></label>
+      <label class="row"><span>开机自启</span><input type="checkbox" id="setAutoStart"></label>
+      <label class="row"><span>配置文件</span>
+        <button class="mini" id="btnOpenDir">打开配置文件夹</button>
+      </label>
+    </div>
+
+    <!-- 关于 -->
+    <div class="group">
+      <div class="g-title">关于</div>
+      <div class="about">浮屿 FuYu v1.0 · 桌面智能悬浮助手<br>悬停展开 · Ctrl+Alt+I 固定 · 拖文件到胶囊即可暂存</div>
+    </div>
+  </main>
+
+  <footer class="st-foot">
+    <span id="savedTip"></span>
+    <button id="btnSave">保存设置</button>
+  </footer>
+</div>
+<script src="settings.js"></script>
+</body>
+</html>
